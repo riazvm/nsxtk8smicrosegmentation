@@ -105,7 +105,7 @@ between the different services deployed
 K8 Deployments
 --------------
 
-1.  **Login to k8s cluster**
+1. **Login to k8s cluster**
 
 > pks login -a \<pks-api\> -u \<pksuser\> -p \<pks-password\> -k
 >
@@ -113,7 +113,7 @@ K8 Deployments
 >
 > pks login -a pks.corp.local -u pksadmin -p VMware1! -k
 
-2.  **Get Kubeconfig**
+2. **Get Kubeconfig**
 
 > pks get-kubeconfig \<cluster-name\> -a \<pks-api\> -u \<pksuser\> -p
 > \<pks-password\> -k
@@ -123,11 +123,11 @@ K8 Deployments
 > pks get-kubeconfig ci-cluster -a pks.corp.local -u pksadmin -p
 > VMware1! -k
 
-3.  **Change context**
+3. **Change context**
 
 > kubectl config use-context ci-cluster
 
-4.  **Create Namespace x1, y1, z1**
+4. **Create Namespace x1, y1, z1**
 
 > kubectl create ns x1
 >
@@ -137,13 +137,13 @@ K8 Deployments
 >
 ![A screenshot of a cell phone Description automatically generated](./media/image2.png)
 
-5.  **Check if namespace is created**
+5. **Check if namespace is created**
 
 > kubectl ge ns
 >
 ![A screen shot of a social media post Description automatically generated](./media/image3.png)
 
-6.  **Create Deployments & Services**
+6. **Create Deployments & Services**
 
 Download the yaml file or copy contents to a local file Eg. micro.yaml . This file declares the K8 resources required . Create the necessary
 resources in their respective namespaces
@@ -154,7 +154,7 @@ resources in their respective namespaces
 >
 ![A picture containing bird Description automatically generated](./media/image4.png)
 
-7.  **Check services and pods created in each namespace**
+7. **Check services and pods created in each namespace**
 
 > kubectl get all -n x1
 >
@@ -168,7 +168,7 @@ resources in their respective namespaces
 >
 ![A screenshot of a cell phone Description automatically generated](./media/image7.png)
 
-8.  **Expose service-a as a load-balancer service**
+8. **Expose service-a as a load-balancer service**
 
 > kubectl expose deployment service-a \\
 > \--name=service-a-lb \--port=80 \--target-port=8080
@@ -181,7 +181,7 @@ resources in their respective namespaces
 
 > kubectl get svc -n x1
 >
-> ![](./media/image9.png)
+![](./media/image9.png)
 
 Current Traffic Flow
 --------------------
@@ -192,34 +192,31 @@ Open a browser and browse to the external ip from the previous step
 
 ![A screenshot of a cell phone Description automatically generated](./media/image10.png)
 
-service-a can be reached from the external network through the load
-balancer which is created in NSX-T
+service-a can be reached from the external network through the load balancer which is created in NSX-T
 
-service-b, service-c and service-d are not exposed and hence are not
-reachable from the external network.
+service-b, service-c and service-d are not exposed and hence are not reachable from the external network.
 
 **Traffic flow between pods**
 
-We will be using the busy-box container within service-a pod and use
-curl to check for responses between service.
+Use the busy-box container within service-a pod and use curl to check for responses between service.
 
 Source Service -- service-a (namespace x1)
 
 Target Service -- service-b (namespace y1)
 
-1.  Get pods running on namespace x1
+1. **Get pods running on namespace x1**
 
 kubectl get po -n x1
 
-> ![A screenshot of a cell phone Description automatically generated](./media/image11.png)
+![A screenshot of a cell phone Description automatically generated](./media/image11.png)
 
-2.  Get service name for service-b running on namespace y1
+2. **Get service name for service-b running on namespace y1**
 
 > kubectl get svc -n y1\
 > \
-> ![](./media/image12.png)
+![](./media/image12.png)
 
-3.  Exec into the busybox container running on a service-a pod
+3. **Exec into the busybox container running on a service-a pod**
 
 > kubectl exec -n \<namespace\> \<podname\> -it -c busybox \-- /bin/sh
 >
@@ -228,32 +225,28 @@ kubectl get po -n x1
 > kubectl exec -n x1 service-a-84965f57cc-nhbrx -it -c busybox \--
 > /bin/sh
 >
-> ![](./media/image13.png)
+![](./media/image13.png)
 
-4.  Use curl to reach service-b in namespace y1
+4. **Use curl to reach service-b in namespace y1**
 
 > curl <http://svc-service-b.y1>
 >
-> NOTE: the service name is prepended by svc in this case, this is
-> defined in the yaml we used to create the K8 resources. The service
-> name is also appended by the namespace.
+NOTE: the service name is prepended by svc in this case, this is defined in the yaml we used to create the K8 resources. The service
+name is also appended by the namespace.
 
-5.  This results in a successful response
+5. **This results in a successful response**
 
 ![A screenshot of a cell phone Description automatically generated](./media/image14.png)
 
-6.  Use the curl command to check the service response of service-d in
-    namespace z1
+6. **Use the curl command to check the service response of service-d in namespace z1**
 
 curl <http://svc-service-d.z1>
 
 This should be successful as well
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image15.png)
+![A screenshot of a cell phone Description automatically generated](./media/image15.png)
 
-At this point all services should be able to communicate to each other.
-The only traffic allowed from outside the cluster is to service-a via
+At this point all services should be able to communicate to each other. The only traffic allowed from outside the cluster is to service-a via
 the loadbalancer.
 
 Configure Micro Segmentation with NSX-T
@@ -262,41 +255,36 @@ Configure Micro Segmentation with NSX-T
 This section goes through the configuration of NSX-T DFW rules that are
 required to allow, restrict or drop pod to pod traffic.
 
-1.  **Check labels on the pods**
+1. **Check labels on the pods**
 
 > kubectl get pod \--show-labels -n x1
 
 Check the labels on the pods in namespace y1 and z1 as well
 
-> ![A screenshot of a cell phone Description automatically generated](./media/image16.png)
+![A screenshot of a cell phone Description automatically generated](./media/image16.png)
 
-2.  **Check tags for pods in NSXT**
+2. **Check tags for pods in NSXT**
 
-Login to NSXT and Navigate to Advanced Networking & Security Switching
-Ports
+Login to NSXT and Navigate to Advanced Networking & Security Switching Ports
 
-> The pods service-a , service-b, service-c and service-d would have a
-> logical port assigned to them
->
-> ![A screenshot of a cell phone Description automatically generated](./media/image17.png)
+The pods service-a , service-b, service-c and service-d would have a logical port assigned to them
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image18.png)
+![A screenshot of a cell phone Description automatically generated](./media/image17.png)
 
-> Click on one of the Logical ports associated with the services we are
-> working with and notice that the tags on NSXT is the labels defined
-> for the pods in K8s.
+![A screenshot of a cell phone Description automatically generated](./media/image18.png)
+
+Click on one of the Logical ports associated with the services we are working with and notice that the tags on NSXT is the labels defined
+for the pods in K8s.
 
 ![A screenshot of a social media post Description automatically generated](./media/image19.png)
 
 3.  **Create NSX-T NSGroup (NSX-T Security Group)**
 
-> Login to NSXT and Navigate to Advanced Networking & Security Inventory
-> Groups
->
-> ![A screenshot of a social media post Description automatically generated](./media/image20.png)
->
-> Create a new NSGroup by clicking on ADD
+Login to NSXT and Navigate to Advanced Networking & Security Inventory Groups
+
+![A screenshot of a social media post Description automatically generated](./media/image20.png)
+
+> ***Create a new NSGroup by clicking on ADD***
 >
 > Create an NSGroup for service-a
 >
