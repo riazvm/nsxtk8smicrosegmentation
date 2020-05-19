@@ -290,150 +290,114 @@ Login to NSXT and Navigate to Advanced Networking & Security Inventory Groups
 >
 > NSGroup name -- nsg-service-a
 >
-<br>
+
 ![A screenshot of a cell phone Description automatically generated](./media/image21.png)
-<br>
 >
 > Click on Membership Critera
->
 > And add the following criteria
 >
-> Logical Port \> Tag \> Equals \> service-a \> Scope \> equals \> app
+> Logical Port > Tag > Equals > service-a > Scope > equals > app
 >
-Note this are the values of the tag retrieved in step 2.
-<br>
+> Note this are the values of the tag retrieved in step 2.
+
 ![A screenshot of a cell phone Description automatically generated](./media/image22.png)
-<br>
-Repeat the same to create NSGroups for service-b, service-c and
-service-d
+
+Repeat the same to create NSGroups for service-b, service-c and service-d
 
 ![A screenshot of a social media post Description automatically generated](./media/image23.png)
 
 4.  **Check for pool members**
 
-> Click on the newly created groups and select Members , check IP
-> addresses
->
-> ![A screenshot of a social media post Description automatically generated](./media/image24.png)
->
-> Run the following kubectl command from the terminal to verify that the
-> ip-address match the pods ip addresses
+Click on the newly created groups and select Members , check IP addresses
+
+![A screenshot of a social media post Description automatically generated](./media/image24.png)
+
+Run the following kubectl command from the terminal to verify that the ip-address match the pods ip addresses
 >
 > kubectl get po -n x1 -o wide
 
 ![](./media/image25.png)
 
-> Repeat the same for the other NSGroups created
+Repeat the same for the other NSGroups created
 
 5.  **Create DFW rules**
 
-> Login to NSXT and navigate to Advanced Networking & Security Security
-> Distributed Firewall
->
-> ![A screenshot of a computer Description automatically generated](./media/image26.png)
->
-> Select the first section listed and navigate to ADD SECTION Add
-> Section Above
->
-> ![A screenshot of a cell phone Description automatically generated](./media/image27.png)
->
-> Section Name -- PtoPDFW-MicroSegmentation
->
-> Object Type -- NSGroup
->
-> Select -- nsg-service-b, nsg-service-c and nsg-service-d
->
-> ![A screenshot of a cell phone Description automatically generated](./media/image28.png)
->
-> Select the newly created PtoPDFW-MicroSegmentation segment and click
-> on Add rule
+Login to NSXT and navigate to Advanced Networking & Security Security Distributed Firewall
 
-Rule 5:
+![A screenshot of a computer Description automatically generated](./media/image26.png)
+
+Select the first section listed and navigate to ADD SECTION Add Section Above
+
+![A screenshot of a cell phone Description automatically generated](./media/image27.png)
+
+> Section Name -- PtoPDFW-MicroSegmentation
+> Object Type -- NSGroup
+> Select -- nsg-service-b, nsg-service-c and nsg-service-d
+> 
+![A screenshot of a cell phone Description automatically generated](./media/image28.png)
+
+Select the newly created PtoPDFW-MicroSegmentation segment and click on Add rule
+
+Rule 5: Denies all Traffic to nsg-service-a, nsg-service-b and nsg-service-c
 
 > ID : DenyAll
->
 > Source : Any
->
 > Destination: Any
->
 > Service: Any
->
 > ContextProfile: Any
->
 > Action : Reject
 >
-> Rule 4:
+Rule 4: Allow service-a to service-b traffic
 >
 > ID : service-aToservice-b
->
 > Source : nsg-service-a
->
 > Destination: nsg-service-b
->
 > Service: Any
->
 > ContextProfile: Any
->
 > Action : Allow
 >
-> To select the Source click on the icon next to the source filed and
-> click on Edit Rule Source
->
-> ![A screenshot of a social media post Description automatically generated](./media/image29.png)
->
-> Select Object Type as NSGroup
->
-> ![A screenshot of a cell phone Description automatically generated](./media/image30.png)
->
-> Similarly select nsg-service-b for destination.
->
-> ![A screenshot of a cell phone screen with text Description automatically generated](./media/image31.png)
->
-> Rule 3:
->
+To select the Source click on the icon next to the source filed and click on Edit Rule Source
+
+![A screenshot of a social media post Description automatically generated](./media/image29.png)
+
+Select Object Type as NSGroup
+
+![A screenshot of a cell phone Description automatically generated](./media/image30.png)
+
+Similarly select nsg-service-b for destination.
+
+![A screenshot of a cell phone screen with text Description automatically generated](./media/image31.png)
+
+Rule 3: Allow service-a to service-c traffic
+
 > ID : service-aToservice-c
->
 > Source : nsg-service-a
->
 > Destination: nsg-service-c
->
 > Service: Any
->
 > ContextProfile: Any
->
 > Action : Allow
->
-> Rule 2:
->
+
+Rule 2: Allow service-b to service-c traffic
+
 > ID : service-bToservice-c
->
 > Source : nsg-service-b
->
 > Destination: nsg-service-c
->
 > Service: Any
->
 > ContextProfile: Any
->
 > Action : Allow
->
-> Rule 1:
->
+
+Rule 1: Allow service-c to service-d traffic
+
 > ID : service-cToservice-d
->
 > Source : nsg-service-c
->
 > Destination: nsg-service-d
->
 > Service: Any
->
 > ContextProfile: Any
->
 > Action : Allow
 
 ![A screenshot of a computer Description automatically generated](./media/image32.png)
 
-> Select PtoPDFW-Microsegmentation and click on Publish
+Select PtoPDFW-Microsegmentation and click on Publish
 
 Test Traffic Flow
 =================
@@ -442,14 +406,11 @@ Test Traffic Flow
 
 Open a browser and browse to the external ip from the previous step
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image10.png)
+![A screenshot of a cell phone Description automatically generated](./media/image10.png)
 
-service-a can be reached from the external network through the load
-balancer which is created in NSX-T
+service-a can be reached from the external network through the load balancer which is created in NSX-T
 
-service-b, service-c and service-d are not exposed and hence are not
-reachable from the external network.
+service-b, service-c and service-d are not exposed and hence are not reachable from the external network.
 
 **Traffic flow between pods**
 
@@ -468,54 +429,51 @@ curl to check for responses between service.
   service-d        service-c             Fail
   service-d        service-b             Fail
 
-1.  Get pods running on namespace x1
+1. **Get pods running on namespace x1**
 
-kubectl get po -n x1
+> kubectl get po -n x1
 
-> ![A screenshot of a cell phone Description automatically generated](./media/image11.png)
+![A screenshot of a cell phone Description automatically generated](./media/image11.png)
 
-2.  Get service name for service-b running on namespace y1
+2. **Get service name for service-b running on namespace y1**
 
-> kubectl get svc -n y1\
-> \
-> ![](./media/image12.png)
+> kubectl get svc -n y1
 
-3.  Exec into the busybox container running on a service-a pod
+![](./media/image12.png)
+
+3.  **Exec into the busybox container running on a service-a pod**
 
 > kubectl exec -n \<namespace\> \<podname\> -it -c busybox -- /bin/sh
 >
 > Eg
 >
 > kubectl exec -n x1 service-a-84965f57cc-nhbrx -it -c busybox -- /bin/sh
->
-> ![](./media/image13.png)
->
-> Use curl to reach service-b in namespace y1
+
+![](./media/image13.png)
+
+ Use curl to reach service-b in namespace y1
 >
 > curl <http://svc-service-b.y1>
 >
-> NOTE: the service name is prepended by svc in this case, this is
-> defined in the yaml we used to create the K8 resources. The service
-> name is also appended by the namespace.
+NOTE: the service name is prepended by svc in this case, this is defined in the yaml we used to create the K8 resources. The service
+name is also appended by the namespace.
 
-4.  This results in a successful response
+4.  **This results in a successful response**
 
 ![A screenshot of a cell phone Description automatically
 generated](./media/image14.png)
 
-5.  Use the curl command to check the service response of service-c in
-    namespace z1
+5. **Use the curl command to check the service response of service-c in namespace z1**
 
-curl <http://svc-service-c.z1>
+> curl <http://svc-service-c.z1>
 
 This should be successful as well
 
-6.  Use the curl command to check the service response of service-d in
-    namespace z1
+6. **Use the curl command to check the service response of service-d in namespace z1**
 
-curl <http://svc-service-d.z1>
+> curl <http://svc-service-d.z1>
 
-> This would fail
+This would fail
 
 ![](./media/image33.png)
 
