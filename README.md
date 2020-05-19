@@ -28,7 +28,7 @@ Table of Contents
 
 [Configure Micro Segmentation with NSX-T](#configure-micro-segmentation-with-nsx-t)
 
-[Test Traffic Flow 24](#test-traffic-flow)
+[Test Traffic Flow](#test-traffic-flow)
 
 Introduction
 ============
@@ -206,7 +206,7 @@ Target Service -- service-b (namespace y1)
 
 1. **Get pods running on namespace x1**
 
-kubectl get po -n x1
+> kubectl get po -n x1
 
 ![A screenshot of a cell phone Description automatically generated](./media/image11.png)
 
@@ -284,13 +284,15 @@ Login to NSXT and Navigate to Advanced Networking & Security Inventory Groups
 
 ![A screenshot of a social media post Description automatically generated](./media/image20.png)
 
-> ***Create a new NSGroup by clicking on ADD***
+***Create a new NSGroup by clicking on ADD***
 >
 > Create an NSGroup for service-a
 >
 > NSGroup name -- nsg-service-a
 >
-> ![A screenshot of a cell phone Description automatically generated](./media/image21.png)
+<br>
+![A screenshot of a cell phone Description automatically generated](./media/image21.png)
+<br>
 >
 > Click on Membership Critera
 >
@@ -298,10 +300,10 @@ Login to NSXT and Navigate to Advanced Networking & Security Inventory Groups
 >
 > Logical Port \> Tag \> Equals \> service-a \> Scope \> equals \> app
 >
-> Note this are the values of the tag retrieved in step 2.
->
-> ![A screenshot of a cell phone Description automatically generated](./media/image22.png)
-
+Note this are the values of the tag retrieved in step 2.
+<br>
+![A screenshot of a cell phone Description automatically generated](./media/image22.png)
+<br>
 Repeat the same to create NSGroups for service-b, service-c and
 service-d
 
