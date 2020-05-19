@@ -34,56 +34,34 @@ Table of Contents
 Introduction
 ============
 
-Containers provide a great deal of benefits to your development pipeline
-and leverage resource isolation but they're not designed with strong
-security boundaries or workload isolation. Tanzu Kubernetes Grid
-Integrated (TKGI) or Enterprise PKS (PKS) integrates with VMware NSX-T
-Data Center (NSX-T) and built on top of VMware vSphere to provide an
-agile software defined infrastructure to build cloud-native
-applications. NSX-T primarily focuses on networking and security for
-these applications and used to create stronger workload isolation.
+Containers provide a great deal of benefits to your development pipeline and support resource isolation but they’re not designed with strong network security boundaries or workload isolation. By default, pods are non-isolated; they accept traffic from any source.
 
-In TKGI, workload isolation can be performed by physically isolating
-workload at the vSphere level or by logically isolating workloads within
-the TKGI deployed clusters (at cluster or namespace isolation). The
-following design patterns can be considered for workload isolation.
+Tanzu Kubernetes Grid Integrated (TKGI previously knowns as Enterprise PKS) coupled with VMware NSX-T Data Center (NSX-T), and VMware vSphere provides an agile, software defined platform to deliver cloud-native applications. NSX-T primarily focuses on networking and security for these applications and the features support implementing stronger workload isolation. 
 
-In this document, we focus on how you can leverage the
-micro-segmentation feature within NSX-T to provide workload isolation.
-NSX-T comes with a distributed firewall that can provide complete
-control of both North-South Traffic but also East-West Traffic and can
-isolate workloads, even if they are next to each other. For example,
-traditional firewalls only isolate network traffic between network VLANs
-or segments but not within a network segment. But with NSX-T distributed
-firewall, you can create rules to isolate workload on the same segment
-and with Kubernetes tags, you can isolate even POD to POD communication.
+In TKGI, workload isolation can be performed by physically isolating workload at the vSphere cluster (group of physical hosts) level or by logically isolating workloads within the TKGI deployed clusters (at cluster or namespace isolation). The following design patterns can be considered for workload isolation.
+![A screenshot of a video game Description automatically generated](./media/image34.png)
 
-In this document, we take a simple application that has several
-components or services. These services are required to communicate with
-each other in a very defined manner. For example, service-a need to
-communicate with service-c and service-b but not with any other service.
-Similarly, service-c needs to communicate with service-d but not with
-service-a or service-b.
+In this document, we focus on how to leverage the micro-segmentation feature within NSX-T to provide workload isolation. NSX-T comes with a distributed firewall that can provide complete control of both North-South Traffic but also East-West Traffic and can isolate workloads, even if they are next to each other. For example, traditional firewalls only isolate network traffic between network VLANs or segments but not within a network segment. But with NSX-T distributed firewall, you can create rules to isolate workload on the same segment and with Kubernetes tags, you can isolate even Kubernetes pod-to-pod communication. 
 
-In such a scenario, we look at how you can isolate the workload using
-NSX-T and this is all done dynamically as pods are created and
-destroyed.
 
-Now, let us assume that all ingress traffic from outside the cluster
-comes into service-a. service-a can is running in namespace x1 and is a
-typically ingress controller like nginx or contour. service-a routes to
-service-b or service-c and service-c might need to talk to database
-service like that defined in service-d. This diagram shows which
-workload should is allowed and what is not between the services.
+In this document, we take a simple application that has several components or services. These services are required to communicate with each other in a very defined manner. For example, service-a needs to communicate with service-c and service-b but not with any other service. Similarly, service-c needs to communicate with service-d but not with service-a or service-b. 
+
+In such a scenario, we look at how to isolate the workload using NSX-T, and also show how this is done dynamically as pods are created and destroyed. 
+
+
+
+
+For this guide, consider the following application with few loosely coupled services. Assume that all ingress traffic from outside the cluster comes into service-a. service-a is running in namespace x1 and typically will use ingress controller like Nginx or Contour. service-a routes to service-b or service-c, and service-c might need to talk to service-d. This diagram shows which workload is allowed and not allowed between the services.
+
 
 ![A screenshot of a video game Description automatically generated](./media/image1.png)
 
 Use-case 
 ========
 
-The k8s cluster has three namespaces (namespace x1, y1 and z1). All
-ingress into the cluster is restricted to namespace x1 and pod
-service-a.
+The k8s cluster has three namespaces (namespace x1, y1 and z1). All ingress into the cluster must be restricted to namespace x1 and pod service-a. 
+Namespace y1 runs a pod service-b and namespace z1 runs pods service-c and service-d.
+
 
 Namespace y1 runs a pod service-b and namespace z1 runs pods service-c
 and service-d.
@@ -91,8 +69,7 @@ and service-d.
 Traffic flows
 -------------
 
-All ingress traffic into the cluster can only be serviced by service-a
-on namespace x1
+All ingress traffic into the cluster can only be serviced by service-a on namespace x1 which means the following traffic flow rules must be enforced:
 
 Service-b allows traffic from service-a
 
@@ -107,35 +84,29 @@ Service-c denies traffic from service-d
 Assumptions
 -----------
 
-K8s cluster exists and there is integration with NSX-T
+K8s cluster managed by TKGI (PKS) exists with NSX-T as the networking layer
 
 K8s Resources
 =============
+In this section, the K8S resources associated with the sample application and services is described.
 
 Pod Definition
 --------------
 
-We will be using a pod definition with 2 containers
+The sample application will have a pod definition with 2 containers:
+•	nginx (to service web requests)
+•	busybox with curl (container to test service-to-service traffic)
 
--   nginx (to service web requests)
-
--   busybox with curl (container to test service to service traffic)
-
-Deployments And Services
+Deployments and Services
 ------------------------
-
-service-a, service-b, service-c and service-d are identical and run the
-above pod definition on their respective namespaces, they run two
-replicas and are exposed as services svc-service-a, svc-service-b,
-svc-service-c, svc-service-d
+service-a, service-b, service-c and service-d are identical and run the above pod definition on their respective namespaces. 
+They run two replicas and are exposed as services svc-service-a, svc-service-b, svc-service-c, and svc-service-d.
 
 K8s Resource Deployments
 ========================
 
-This section goes through the steps to set up the K8 environment with
-the deployments in their respective namespaces. At the end of the setup
-a test will be performed to establish that the traffic flows between the
-different services deployed
+This section goes through the steps to set up the K8 environment with the deployments in their respective namespaces. 
+At the end of the setup, a test will be performed to verify that the traffic flows between the services.
 
 K8 Deployments
 --------------
@@ -144,7 +115,7 @@ K8 Deployments
 
 > pks login -a <pks-api\> -u <pksuser\> -p <pks-password\> -k
 >
-> Eg.
+> e.g.
 >
 > pks login -a pks.corp.local -u pksadmin -p VMware1! -k
 
@@ -153,7 +124,7 @@ K8 Deployments
 > pks get-kubeconfig \<cluster-name\> -a \<pks-api\> -u \<pksuser\> -p
 > \<pks-password\> -k
 >
-> Eg.
+> e.g.
 >
 > pks get-kubeconfig ci-cluster -a pks.corp.local -u pksadmin -p
 > VMware1! -k
@@ -299,8 +270,9 @@ are defined as app={service name}. e.g.: app=service-a
 
 2.  **Check tags for pods in NSXT**
 
-Login to NSXT and Navigate to Advanced Networking & Security Switching
-Ports
+Login to NSX-T Manager and navigate to Advanced Networking & Security > Switching > Ports
+The pods service-a, service-b, service-c and service-d would have a logical port assigned to them.
+
 
 The pods service-a , service-b, service-c and service-d would have a logical port assigned to them
 
