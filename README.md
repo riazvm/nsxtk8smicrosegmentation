@@ -43,7 +43,7 @@ nginx/contour)
 
 ![A picture containing screenshot Description automatically generated](./media/image1.png)  
 
-Use-case 
+Usecase 
 ========
 
 The k8s cluster has three namespaces (namespace x1, y1 and z1). All
