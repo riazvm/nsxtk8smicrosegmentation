@@ -337,20 +337,20 @@ Select the newly created PtoPDFW-MicroSegmentation segment and click on Add rule
 
 Rule 5: Denies all Traffic to nsg-service-a, nsg-service-b and nsg-service-c
 
-> ID : DenyAll
-> Source : Any
-> Destination: Any
-> Service: Any
-> ContextProfile: Any
-> Action : Reject
+> ID : DenyAll <br>
+> Source : Any <br>
+> Destination: Any <br>
+> Service: Any <br>
+> ContextProfile: Any <br>
+> Action : Reject 
 >
 Rule 4: Allow service-a to service-b traffic
 >
-> ID : service-aToservice-b
-> Source : nsg-service-a
-> Destination: nsg-service-b
-> Service: Any
-> ContextProfile: Any
+> ID : service-aToservice-b <br>
+> Source : nsg-service-a <br>
+> Destination: nsg-service-b <br>
+> Service: Any <br>
+> ContextProfile: Any <br>
 > Action : Allow
 >
 To select the Source click on the icon next to the source filed and click on Edit Rule Source
@@ -368,29 +368,29 @@ Similarly select nsg-service-b for destination.
 Rule 3: Allow service-a to service-c traffic
 
 > ID : service-aToservice-c <br>
-> Source : nsg-service-a
-> Destination: nsg-service-c
-> Service: Any
-> ContextProfile: Any
+> Source : nsg-service-a <br>
+> Destination: nsg-service-c <br>
+> Service: Any <br>
+> ContextProfile: Any <br>
 > Action : Allow
 
 Rule 2: Allow service-b to service-c traffic
 
-> ID : service-bToservice-c
-> Source : nsg-service-b
-> Destination: nsg-service-c
-> Service: Any
-> ContextProfile: Any
+> ID : service-bToservice-c <br>
+> Source : nsg-service-b <br>
+> Destination: nsg-service-c <br>
+> Service: Any <br>
+> ContextProfile: Any <br>
 > Action : Allow
 
 Rule 1: Allow service-c to service-d traffic
 
-> ID : service-cToservice-d
-> Source : nsg-service-c
-> Destination: nsg-service-d
-> Service: Any
-> ContextProfile: Any
-> Action : Allow
+> ID : service-cToservice-d <br>
+> Source : nsg-service-c <br>
+> Destination: nsg-service-d <br>
+> Service: Any <br>
+> ContextProfile: Any <br>
+> Action : Allow <br>
 
 ![A screenshot of a computer Description automatically generated](./media/image32.png)
 
@@ -411,20 +411,22 @@ service-b, service-c and service-d are not exposed and hence are not reachable f
 
 **Traffic flow between pods**
 
-We will be using the busy-box container within service-a pod and use
-curl to check for responses between service.
+We will be using the busy-box container within service-a pod and use curl to check for responses between service.
 
-  **Source Pod**   **Destination Pod**   **Result**
-  ---------------- --------------------- ------------
-  service-a        service-b             Success
-  service-a        service-c             Success
-  service-a        service-d             Fail
-  service-b        service-c             Success
-  service-b        service-d             Fail
-  service-c        service-d             Success
-  service-c        service-b             Fail
-  service-d        service-c             Fail
-  service-d        service-b             Fail
+ -------------------------------------------------------------
+| **Source Pod**   |  **Destination Pod** |  **Test Result**  | 
+| ---------------- | ---------------------| ------------------| 
+| service-a        | service-b            | Success           | 
+| service-a        | service-c            | Success           | 
+| service-a        | service-d            | Fail              | 
+| service-b        | service-c            | Success           | 
+| service-b        | service-d            | Fail              | 
+| service-c        | service-d            | Success           | 
+| service-c        | service-b            | Fail              | 
+| service-d        | service-c            | Fail              | 
+| service-d        | service-b            | Fail              | 
+
+
 
 1. **Get pods running on namespace x1**
 
