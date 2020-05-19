@@ -1,6 +1,7 @@
 VMware Advanced Customer Engagements (ACE) Team
 
-*** Authored by Riaz Mohamed and Raghu Pemmaraju ***
+Authored by Riaz Mohamed and Raghu Pemmaraju <br>
+
 May 2020
 
 Table of Contents {#table-of-contents .TOC-Heading}
