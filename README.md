@@ -26,8 +26,7 @@ Table of Contents
 
 [Current Traffic Flow](#current-traffic-flow)
 
-[Configure Micro Segmentation with NSX-T
-11](#configure-micro-segmentation-with-nsx-t)
+[Configure Micro Segmentation with NSX-T](#configure-micro-segmentation-with-nsx-t)
 
 [Test Traffic Flow 24](#test-traffic-flow)
 
@@ -42,8 +41,7 @@ controlled. Any ingress into the cluster is serviced by a pod running in
 namespace x1 (typically this would be an ingress controller like
 nginx/contour)
 
-![A picture containing screenshot Description automatically
-generated](./media/image1.png)  
+![A picture containing screenshot Description automatically generated](./media/image1.png)  
 
 Use-case 
 ========
@@ -137,15 +135,13 @@ K8 Deployments
 >
 > kubectl create ns z1
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image2.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image2.png)
 
 5.  **Check if namespace is created**
 
 > kubectl ge ns
 >
-> ![A screen shot of a social media post Description automatically
-> generated](./media/image3.png)
+> ![A screen shot of a social media post Description automatically generated](./media/image3.png)
 
 6.  **Create Deployments & Services**
 
@@ -157,25 +153,21 @@ K8 Deployments
 >
 > kubectl apply -f micro.yaml
 >
-> ![A picture containing bird Description automatically
-> generated](./media/image4.png)
+> ![A picture containing bird Description automatically generated](./media/image4.png)
 
 7.  **Check services and pods created in each namespace**
 
 > kubectl get all -n x1
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image5.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image5.png)
 >
 > kubectl get all -n y1
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image6.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image6.png)
 >
 > kubectl get all -n z1
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image7.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image7.png)
 
 8.  **Expose service-a as a load-balancer service**
 
@@ -199,8 +191,7 @@ Current Traffic Flow
 
 Open a browser and browse to the external ip from the previous step
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image10.png)
+![A screenshot of a cell phone Description automatically generated](./media/image10.png)
 
 service-a can be reached from the external network through the load
 balancer which is created in NSX-T
@@ -221,15 +212,13 @@ Target Service -- service-b (namespace y1)
 
 kubectl get po -n x1
 
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image11.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image11.png)
 
 2.  Get service name for service-b running on namespace y1
 
 > kubectl get svc -n y1\
 > \
-> ![](./media/image12.png){width="5.742222222222222in"
-> height="0.4722222222222222in"}
+> ![](./media/image12.png)
 
 3.  Exec into the busybox container running on a service-a pod
 
@@ -252,8 +241,7 @@ kubectl get po -n x1
 
 5.  This results in a successful response
 
-![A screenshot of a cell phone Description automatically
-generated](./media/image14.png)
+![A screenshot of a cell phone Description automatically generated](./media/image14.png)
 
 6.  Use the curl command to check the service response of service-d in
     namespace z1
@@ -281,8 +269,7 @@ required to allow, restrict or drop pod to pod traffic.
 
 Check the labels on the pods in namespace y1 and z1 as well
 
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image16.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image16.png)
 
 2.  **Check tags for pods in NSXT**
 
@@ -292,8 +279,7 @@ Ports
 > The pods service-a , service-b, service-c and service-d would have a
 > logical port assigned to them
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image17.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image17.png)
 
 ![A screenshot of a cell phone Description automatically
 generated](./media/image18.png)
@@ -302,16 +288,14 @@ generated](./media/image18.png)
 > working with and notice that the tags on NSXT is the labels defined
 > for the pods in K8s.
 
-![A screenshot of a social media post Description automatically
-generated](./media/image19.png)
+![A screenshot of a social media post Description automatically generated](./media/image19.png)
 
 3.  **Create NSX-T NSGroup (NSX-T Security Group)**
 
 > Login to NSXT and Navigate to Advanced Networking & Security Inventory
 > Groups
 >
-> ![A screenshot of a social media post Description automatically
-> generated](./media/image20.png)
+> ![A screenshot of a social media post Description automatically generated](./media/image20.png)
 >
 > Create a new NSGroup by clicking on ADD
 >
@@ -319,8 +303,7 @@ generated](./media/image19.png)
 >
 > NSGroup name -- nsg-service-a
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image21.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image21.png)
 >
 > Click on Membership Critera
 >
@@ -330,22 +313,19 @@ generated](./media/image19.png)
 >
 > Note this are the values of the tag retrieved in step 2.
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image22.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image22.png)
 
 Repeat the same to create NSGroups for service-b, service-c and
 service-d
 
-![A screenshot of a social media post Description automatically
-generated](./media/image23.png)
+![A screenshot of a social media post Description automatically generated](./media/image23.png)
 
 4.  **Check for pool members**
 
 > Click on the newly created groups and select Members , check IP
 > addresses
 >
-> ![A screenshot of a social media post Description automatically
-> generated](./media/image24.png)
+> ![A screenshot of a social media post Description automatically generated](./media/image24.png)
 >
 > Run the following kubectl command from the terminal to verify that the
 > ip-address match the pods ip addresses
@@ -361,14 +341,12 @@ generated](./media/image23.png)
 > Login to NSXT and navigate to Advanced Networking & Security Security
 > Distributed Firewall
 >
-> ![A screenshot of a computer Description automatically
-> generated](./media/image26.png)
+> ![A screenshot of a computer Description automatically generated](./media/image26.png)
 >
 > Select the first section listed and navigate to ADD SECTION Add
 > Section Above
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image27.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image27.png)
 >
 > Section Name -- PtoPDFW-MicroSegmentation
 >
@@ -376,8 +354,7 @@ generated](./media/image23.png)
 >
 > Select -- nsg-service-b, nsg-service-c and nsg-service-d
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image28.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image28.png)
 >
 > Select the newly created PtoPDFW-MicroSegmentation segment and click
 > on Add rule
@@ -413,18 +390,15 @@ Rule 5:
 > To select the Source click on the icon next to the source filed and
 > click on Edit Rule Source
 >
-> ![A screenshot of a social media post Description automatically
-> generated](./media/image29.png)
+> ![A screenshot of a social media post Description automatically generated](./media/image29.png)
 >
 > Select Object Type as NSGroup
 >
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image30.png){width="7.5in" height="5.60625in"}
+> ![A screenshot of a cell phone Description automatically generated](./media/image30.png)
 >
 > Similarly select nsg-service-b for destination.
 >
-> ![A screenshot of a cell phone screen with text Description
-> automatically generated](./media/image31.png)
+> ![A screenshot of a cell phone screen with text Description automatically generated](./media/image31.png)
 >
 > Rule 3:
 >
@@ -468,8 +442,7 @@ Rule 5:
 >
 > Action : Allow
 
-![A screenshot of a computer Description automatically
-generated](./media/image32.png)
+![A screenshot of a computer Description automatically generated](./media/image32.png)
 
 > Select PtoPDFW-Microsegmentation and click on Publish
 
@@ -510,8 +483,7 @@ curl to check for responses between service.
 
 kubectl get po -n x1
 
-> ![A screenshot of a cell phone Description automatically
-> generated](./media/image11.png)
+> ![A screenshot of a cell phone Description automatically generated](./media/image11.png)
 
 2.  Get service name for service-b running on namespace y1
 
@@ -521,12 +493,11 @@ kubectl get po -n x1
 
 3.  Exec into the busybox container running on a service-a pod
 
-> kubectl exec -n \<namespace\> \<podname\> -it -c busybox \-- /bin/sh
+> kubectl exec -n \<namespace\> \<podname\> -it -c busybox -- /bin/sh
 >
 > Eg
 >
-> kubectl exec -n x1 service-a-84965f57cc-nhbrx -it -c busybox \--
-> /bin/sh
+> kubectl exec -n x1 service-a-84965f57cc-nhbrx -it -c busybox -- /bin/sh
 >
 > ![](./media/image13.png)
 >
