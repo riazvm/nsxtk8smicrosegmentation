@@ -215,12 +215,11 @@ Target Service -- service-b (namespace y1)
 
 3. **Exec into the busybox container running on a service-a pod**
 
-> kubectl exec -n \<namespace\> \<podname\> -it -c busybox \-- /bin/sh
+> kubectl exec -n \<namespace\> \<podname\> -it -c busybox -- /bin/sh
 >
 > Eg
 >
-> kubectl exec -n x1 service-a-84965f57cc-nhbrx -it -c busybox \--
-> /bin/sh
+> kubectl exec -n x1 service-a-84965f57cc-nhbrx -it -c busybox --/bin/sh
 >
 ![](./media/image13.png)
 
