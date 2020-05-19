@@ -135,39 +135,38 @@ K8 Deployments
 >
 > kubectl create ns z1
 >
-> ![A screenshot of a cell phone Description automatically generated](./media/image2.png)
+![A screenshot of a cell phone Description automatically generated](./media/image2.png)
 
 5.  **Check if namespace is created**
 
 > kubectl ge ns
 >
-> ![A screen shot of a social media post Description automatically generated](./media/image3.png)
+![A screen shot of a social media post Description automatically generated](./media/image3.png)
 
 6.  **Create Deployments & Services**
 
-> Download the yaml file or copy contents to a local file Eg. micro.yaml
-> . This file declares the K8 resources required . Create the necessary
-> resources in their respective namespaces
->
-> [https://github.com/riazvm/nsxtk8smicrosegmentation/blob/master/yaml/micro.yaml](https://github.com/riazvm/nsxtk8smicrosegmentation/blob/master/yaml/micro.yaml)
+Download the yaml file or copy contents to a local file Eg. micro.yaml . This file declares the K8 resources required . Create the necessary
+resources in their respective namespaces
+
+[https://github.com/riazvm/nsxtk8smicrosegmentation/blob/master/yaml/micro.yaml](https://github.com/riazvm/nsxtk8smicrosegmentation/blob/master/yaml/micro.yaml)
 >
 > kubectl apply -f micro.yaml
 >
-> ![A picture containing bird Description automatically generated](./media/image4.png)
+![A picture containing bird Description automatically generated](./media/image4.png)
 
 7.  **Check services and pods created in each namespace**
 
 > kubectl get all -n x1
 >
-> ![A screenshot of a cell phone Description automatically generated](./media/image5.png)
+![A screenshot of a cell phone Description automatically generated](./media/image5.png)
 >
 > kubectl get all -n y1
 >
-> ![A screenshot of a cell phone Description automatically generated](./media/image6.png)
+![A screenshot of a cell phone Description automatically generated](./media/image6.png)
 >
 > kubectl get all -n z1
 >
-> ![A screenshot of a cell phone Description automatically generated](./media/image7.png)
+![A screenshot of a cell phone Description automatically generated](./media/image7.png)
 
 8.  **Expose service-a as a load-balancer service**
 
