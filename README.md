@@ -170,14 +170,11 @@ resources in their respective namespaces
 
 8. **Expose service-a as a load-balancer service**
 
-> kubectl expose deployment service-a \\
-> \--name=service-a-lb \--port=80 \--target-port=8080
-> \--type=LoadBalancer \--namespace=x1
+> kubectl expose deployment service-a --name=service-a-lb --port=80 --target-port=8080 --type=LoadBalancer --namespace=x1
 
 ![](./media/image8.png)
 
-9.  **Check the external URL/IP address assigned to the service (make
-    note of the first IP addres under External-IP).**
+9.  **Check the external URL/IP address assigned to the service (make note of the first IP addres under External-IP).**
 
 > kubectl get svc -n x1
 >
@@ -370,7 +367,7 @@ Similarly select nsg-service-b for destination.
 
 Rule 3: Allow service-a to service-c traffic
 
-> ID : service-aToservice-c
+> ID : service-aToservice-c <br>
 > Source : nsg-service-a
 > Destination: nsg-service-c
 > Service: Any
