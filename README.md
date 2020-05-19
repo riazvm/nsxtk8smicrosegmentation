@@ -4,7 +4,7 @@ Authored by Riaz Mohamed and Raghu Pemmaraju <br>
 
 May 2020
 
-Table of Contents {#table-of-contents .TOC-Heading}
+Table of Contents
 =================
 
 [Introduction ](#introduction)
