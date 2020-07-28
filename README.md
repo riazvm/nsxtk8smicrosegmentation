@@ -496,6 +496,6 @@ This should be successful as well
 
 This would fail
 
-![](./media/image33.png
+![](./media/image33.png)
 
 Exec into each pod and check connectivity between pods.
